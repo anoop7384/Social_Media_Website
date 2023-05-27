@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% if title %}
+    <title>Alcheringa Connect- {{ title }}</title>
+    {% else %}
+    <title>Alcheringa Connect</title>
+    {% endif %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #id_username {
+        box-shadow: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        background-color: rgb(240, 190, 159);
+        border-radius: 0.3rem;
+        padding-left: 0.5rem;
+        font-size: large;
+      }
+
+      #id_password1 {
+        width: 100%;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        background-color: rgb(240, 190, 159);
+        border-radius: 0.3rem;
+        padding-left: 0.5rem;
+        font-size: large;
+      }
+      #id_password2 {
+        width: 100%;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        background-color: rgb(240, 190, 159);
+        border-radius: 0.3rem;
+        padding-left: 0.5rem;
+        font-size: large;
+      }
+      #id_email {
+        width: 100%;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        background-color: rgb(240, 190, 159);
+        border-radius: 0.3rem;
+        padding-left: 0.5rem;
+        font-size: large;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="grid grid-cols-12 mt-32">
+      <div class="md:col-span-6 col-span-12 mt-48">
+        <div class="grid grid-cols-12 flex items-center">
+          <div class="col-span-4 flex justify-end">
+            <img
+              src="{%static 'connect/images/logi.jpg' %}"
+              class="h-20"
+              alt=""
+              srcset=""
+              class=""
+            />
+          </div>
+          <div class="col-span-8 text-5xl pl-3 text-gray-600">
+            Alcheringa <span class="text-orange-500">Connect</span>
+          </div>
+        </div>
+        <div class="text-4xl py-12 px-36 text-gray-400 text-center">
+          Alcheringa connect lets you associate with the people in your life
+        </div>
+      </div>
+      <div class="md:col-span-5 col-span-12">
+        <div class="mx-24 shadow-lg rounded-3xl">
+          <div class="bg-orange-500 h-48 rounded-t-3xl text-white px-8 pt-20">
+            <div class="text-5xl mb-4">Register</div>
+            <div class="grid grid-cols-2 text-lg">
+              <div>Already have an account?</div>
+              <div class="underline underline-offset-2 text-end">
+                <a href="{% url 'login' %}">Login Here</a>
+              </div>
+            </div>
+          </div>
+          <div class="" style="height: 35rem">
+            <form method="POST" class="text-gray-500 mx-12 mt-4">
+              {% csrf_token %}
+              <div class="text-2xl">
+                <label class="" for="exampleInputUser">Username</label>
+                {{form.username}}
+              </div>
+              <div class="text-2xl">
+                <label class="my-4" for=" exampleInputEmail">E-mail</label>
+                {{form.email}}
+              </div>
+              <div class="text-2xl">
+                <label class="my-4" for=" exampleInputPassword1"
+                  >Password</label
+                >
+                {{form.password1}}
+              </div>
+              <div class="text-2xl">
+                <label class="my-4" for=" exampleInputPassword2"
+                  >Confirm Password</label
+                >
+                {{form.password2}}
+              </div>
+              <div style="color: red">{{message}}</div>
+              <button
+                type="submit"
+                id="submit"
+                class="text-4xl text-orange-300 outline outline-1 outline-orange-300 w-96 p-2 mt-4 mx-auto"
+                style="width: 100%"
+              >
+                Sign Up
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

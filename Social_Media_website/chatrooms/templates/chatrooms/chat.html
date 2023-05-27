@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% if title %}
+    <title>Alcheringa Connect- {{ title }}</title>
+    {% else %}
+    <title>Alcheringa Connect</title>
+    {% endif %}
+    <style>
+      #id_image {
+        padding-left: 5rem;
+        padding-top: 4rem;
+      }
+
+      #id_constent {
+        box-shadow: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        height: 5rem;
+        background-color: rgb(255 237 213);
+        border-radius: 0.3rem;
+        padding-left: 0.5rem;
+        font-size: large;
+      }
+      #imgUP {
+        cursor: pointer;
+        text-align: center;
+        justify-content: center;
+        border: 1px solid lightgray;
+        border-radius: 1rem;
+
+        margin-top: 1rem;
+        font-size: 2rem;
+        color: grey;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="grid grid-cols-12 mt-4">
+      <div class="lg:col-span-7 col-span-12">
+        <div
+          class="grid grid-cols-12 flex items-center cursor-pointer"
+          onclick="location.href=`{% url 'connect-profile' %}`;"
+        >
+          <div class="col-span-3 flex justify-end">
+            <img
+              src="{%static 'connect\images\logi.jpg' %}"
+              class="h-20"
+              alt=""
+              srcset=""
+              class=""
+            />
+          </div>
+          <div class="col-span-9 text-5xl pl-3 text-gray-600">
+            Alcheringa <span class="text-orange-500">Connect</span>
+          </div>
+        </div>
+        <div class="mx-48 pl-16 mt-0">
+          <div class="container mx-auto px-4 py-8">
+            <div class="flex flex-col" style="height:40rem;">
+              <div
+                class="flex-grow border border-gray-300 rounded-lg overflow-hidden"
+              >
+                <div class="flex flex-col h-full">
+                  <div class="bg-orange-600 px-4 py-2">
+                    <h2 class="text-lg text-white font-semibold">{{account.username}}</h2>
+                  </div>
+                  <div class="flex-grow px-4 py-2 overflow-y-scroll">
+                    <div class="flex flex-col space-y-2">
+                      <!-- Chat messages go here -->
+                      {% for message in messages%} {% if message.sender == user %}
+                      <div class="flex items-end justify-end">
+                        <div
+                          class="bg-blue-500 rounded-lg p-2 text-white max-w-xs"
+                        >
+                          <p>{{message.content}}</p>
+                        </div>
+                      </div>
+                      
+                      {% else %}
+                      <div class="flex items-start">
+                        <div
+                          class="bg-green-500 rounded-lg p-2 text-white max-w-xs"
+                        >
+                          <p>{{message.content}}</p>
+                        </div>
+                      </div>
+                      {% endif %} {% endfor %}
+                    </div>
+                  </div>
+                  <form class="bg-gray-200 px-4 py-2 flex items-center" method="POST">
+                    {% csrf_token %}
+                    <input
+                      type="text"
+                      name="textfield"
+                      class="w-full border border-gray-300 rounded-lg px-2 py-1 mr-2"
+                      {% comment %} placeholder="Type your message..." {% endcomment %}
+                      
+                    />
+                    <button class="px-4 py-2 bg-orange-600 text-white rounded-lg" type="submit">Send</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="lg:col-span-5 col-span-12 mt-24 lg:fixed lg:top-0 lg:right-0"
+        style="width: 50rem"
+      >
+        <div
+          class="lg:ml-36 lg:mr-36 mx-auto shadow-lg rounded-3xl"
+          style="width: 32rem"
+        >
+          <div
+            class="grid grid-cols-6 bg-orange-500 h-48 rounded-t-3xl text-white px-8 pt-20"
+          >
+            <div
+              class="text-5xl mb-2 col-span-4 flex items-center cursor-pointer"
+              onclick="window.location.href=`{% url 'editprofile' %}`"
+            >
+              My Profile
+            </div>
+            <div class="col-span-2 flex justify-end items-center">
+              <img
+                src="{%static 'connect\images\exit.png' %}"
+                class="h-20 cursor-pointer"
+                alt=""
+                onclick="window.location.href=`{% url 'logout' %}`"
+              />
+            </div>
+            <a
+              class="col-span-4 text-xl underline underline-offset-2 mb-2"
+              href="{% url 'editprofile' %}"
+              >Edit Profile</a
+            >
+          </div>
+          <div class="px-12 pt-12" style="height: 28rem">
+            <div id="name" class="mb-8">
+              <div class="grid grid-cols-6">
+                <div class="col-span-1 flex items-center">
+                  <img
+                    src="{{ user.profile.image.url }}"
+                    alt="logo"
+                    srcset=""
+                    class="h-12 w-12 rounded-full"
+                  />
+                </div>
+                <div class="col-span-5 pl-4">
+                  <div class=" ">username</div>
+                  <div><b>{{ user.username }}</b></div>
+                </div>
+              </div>
+            </div>
+            <div id="desc" class="text-xl mt-12 h-28">{{user.profile.bio}}</div>
+            <div
+              onclick="location.href=`{% url 'connect-posts' %}`;"
+              class="grid grid-cols-6 mt-12 cursor-pointer"
+            >
+              <div class="col-span-1">
+                <img
+                  src="{%static 'connect\images\images.jpg' %}"
+                  alt=""
+                  srcset=""
+                  class="h-12"
+                />
+              </div>
+              <div class="col-span-5 text-2xl">My Posts</div>
+            </div>
+            <div
+              onclick="location.href=`{% url 'connect-saved' %}`;"
+              class="grid grid-cols-6 my-4 cursor-pointer"
+            >
+              <div class="col-span-1">
+                <img
+                  src="{%static 'connect\images\save.png' %}"
+                  alt=""
+                  srcset=""
+                  class="h-12"
+                />
+              </div>
+              <div class="col-span-5 text-2xl">Saved Posts</div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ml-36 mr-36 shadow-lg rounded-3xl px-12 pt-8 pb-4 mt-4 cursor-pointer"
+          id="create"
+        >
+          <div
+            onclick="location.href=`{% url 'connect-create' %}`;"
+            class="grid grid-cols-6"
+          >
+            <div class="col-span-1">
+              <img
+                src="{%static 'connect\images\images.jpg' %}"
+                alt=""
+                srcset=""
+                class="h-8"
+              />
+            </div>
+            <div class="col-span-5 text-2xl">Create a new Post</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'connect/scripts/create.js' %}"></script>
+  </body>
+</html>

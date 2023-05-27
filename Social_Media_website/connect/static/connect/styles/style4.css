@@ -1,0 +1,39 @@
+html {
+    font-size: 62.5%;
+}
+
+body{
+    margin: 10rem auto;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    max-width: 200rem;
+}
+
+
+
+#c1 {
+    height: 40rem;
+    width: 50rem;
+    box-shadow: .5rem .5rem 1.5rem rgb(114, 111, 111);
+}
+
+ul {
+    float :none;
+}
+
+ul li {
+    float: left;
+    margin: 3rem;
+}
+
+@media(max-width:998px) {
+    html {
+        font-size: 55%;
+    }
+ }
+
+ @media(max-width:768px) {
+    html {
+        font-size: 55%;
+    }
+ }

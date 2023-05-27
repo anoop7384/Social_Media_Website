@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% if title %}
+    <title>Alcheringa Connect- {{ title }}</title>
+    {% else %}
+    <title>Alcheringa Connect</title>
+    {% endif %}
+    <style>
+      #id_image {
+        padding-left: 5rem;
+        padding-top: 4rem;
+      }
+
+      #id_constent {
+        box-shadow: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        height: 5rem;
+        background-color: rgb(255 237 213);
+        border-radius: 0.3rem;
+        padding-left: 0.5rem;
+        font-size: large;
+      }
+      #imgUP {
+        cursor: pointer;
+        text-align: center;
+        justify-content: center;
+        border: 1px solid lightgray;
+        border-radius: 1rem;
+
+        margin-top: 1rem;
+        font-size: 2rem;
+        color: grey;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="grid grid-cols-12 mt-4">
+      <div class="lg:col-span-7 col-span-12">
+        <div
+          class="grid grid-cols-12 flex items-center cursor-pointer"
+          onclick="location.href=`{% url 'connect-profile' %}`;"
+        >
+          <div class="col-span-3 flex justify-end">
+            <img
+              src="{%static 'connect\images\logi.jpg' %}"
+              class="h-20"
+              alt=""
+              srcset=""
+              class=""
+            />
+          </div>
+          <div class="col-span-9 text-5xl pl-3 text-gray-600">
+            Alcheringa <span class="text-orange-500">Connect</span>
+          </div>
+        </div>
+        <div class="mx-48 pl-16 mt-24">
+          {% for post in posts%}
+          <div
+            class="card shadow-xl border border-gray-200 rounded-t-3xl pt-4 my-12"
+            id="c1"
+          >
+            <div class="pl-8 mb-4">
+              <div class="grid grid-cols-8">
+                <div class="col-span-1">
+                  <img
+                    src="{{ post.author.profile.image.url }}"
+                    alt="logo"
+                    srcset=""
+                    class="h-12 w-12 rounded-full"
+                  />
+                </div>
+                <div class="col-span-5 text-2xl ">
+                  <b
+                    class="cursor-pointer hover:underline underline-offset-2"
+                    onclick="window.location.href=`{% url 'profile-account' post.id %}`"
+                    >{{ post.author }}</b
+                  >
+                </div>
+                <div class="col-span-2 text-2xl flex justify-end px-4">
+                  {{post.date_posted|date:"j b"}}
+                </div>
+              </div>
+            </div>
+            <div
+              id="c1b"
+              onclick="window.location.href=`{% url 'post-detail' post.id %}`"
+            >
+              <img
+                src="{{ post.image.url }}"
+                alt=""
+                srcset=""
+                class="h-96 cursor-pointer"
+              />
+            </div>
+            <div id="c1c">
+              <div class="grid-cols-12 my-4 px-8">
+                <div class="col-span-2">
+                  {% if post in user.profile.likedPosts.all %}
+                  <img
+                    src="{%static 'connect/images/unlike.png' %}"
+                    alt=""
+                    srcset=""
+                    class="h-12 w-12 cursor-pointer float-left"
+                    onclick="window.location.href=`{% url 'post-unlike' post.id %}`"
+                  />
+
+                  {% else %}
+                  <img
+                    src="{%static 'connect/images/download.png' %}"
+                    alt=""
+                    srcset=""
+                    class="h-12 w-12 cursor-pointer float-left"
+                    onclick="window.location.href=`{% url 'post-like' post.id %}`"
+                  />
+                  {% endif %}
+                </div>
+                <div
+                  class="col-span-8 text-2xl float-left ml-4 flex items-center pt-2"
+                >
+                  <b>{{ post.likes }} Likes</b>
+                </div>
+
+                <div class="col-span-2 flex justify-end" type="submit">
+                  {% if post in user.profile.savedPosts.all %}
+                  <img
+                    src="{%static 'connect/images/saved.jpg' %}"
+                    alt=""
+                    srcset=""
+                    class="saved h-12 w-12 cursor-pointer"
+                    onclick="window.location.href=`{% url 'post-unsave' post.id %}`"
+                  />
+
+                  {% else %}
+                  <img
+                    src="{%static 'connect/images/save.png' %}"
+                    alt=""
+                    srcset=""
+                    class="unsaved h-12 w-12 cursor-pointer"
+                    onclick="window.location.href=`{% url 'post-save' post.id %}`"
+                  />
+                  {% endif %}
+                </div>
+              </div>
+              <button
+                class="px-8 text-2xl mb-4"
+                onclick="window.location.href=`{% url 'post-detail' post.id %}`"
+              >
+                View all comments
+              </button>
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
+      </div>
+      <div
+        class="lg:col-span-5 col-span-12 mt-0  lg:fixed lg:top-0 lg:right-0"
+        style="width: 50rem"
+      >
+        <div class="flex justify-end px-12 mb-20 mt-8 cursor-pointer" onclick="window.location.href=`{% url 'main-profile' %}`">
+          <img
+            src="{{user.profile.image.url}}"
+            alt="img"
+            width="80px"
+            height="80px"
+            class="h-12 w-12 rounded-full"
+          />
+        </div>
+        <div
+          class="lg:ml-36 lg:mr-36 mx-auto shadow-lg rounded-3xl"
+          style="width: 32rem"
+        >
+          <div
+            class="grid grid-cols-6 bg-orange-500 h-48 rounded-t-3xl text-white px-8 pt-20"
+          >
+            <div
+              class="text-5xl mb-2 col-span-4 flex items-center cursor-pointer"
+              onclick="window.location.href=`{% url 'editprofile' %}`"
+            >
+              My Profile
+            </div>
+            <div class="col-span-2 flex justify-end items-center">
+              <img
+                src="{%static 'connect\images\exit.png' %}"
+                class="h-20 cursor-pointer"
+                alt=""
+                onclick="window.location.href=`{% url 'logout' %}`"
+              />
+            </div>
+            <a
+              class="col-span-4 text-xl underline underline-offset-2 mb-2"
+              href="{% url 'editprofile' %}"
+              >Edit Profile</a
+            >
+          </div>
+          <div class="px-12 pt-12" style="height: 28rem">
+            <div id="name" class="mb-8">
+              <div class="grid grid-cols-6">
+                <div class="col-span-1 flex items-center">
+                  <img
+                    src="{{ user.profile.image.url }}"
+                    alt="logo"
+                    srcset=""
+                    class="h-12 w-12 rounded-full"
+                  />
+                </div>
+                <div class="col-span-5 pl-4">
+                  <div class=" ">username</div>
+                  <div><b>{{ user.username }}</b></div>
+                </div>
+              </div>
+            </div>
+            <div id="desc" class="text-xl mt-12 h-28">{{user.profile.bio}}</div>
+            <div
+              onclick="location.href=`{% url 'connect-posts' %}`;"
+              class="grid grid-cols-6 mt-12 cursor-pointer"
+            >
+              <div class="col-span-1">
+                <img
+                  src="{%static 'connect\images\images.jpg' %}"
+                  alt=""
+                  srcset=""
+                  class="h-12"
+                />
+              </div>
+              <div class="col-span-5 text-2xl">My Posts</div>
+            </div>
+            <div
+              onclick="location.href=`{% url 'connect-saved' %}`;"
+              class="grid grid-cols-6 my-4 cursor-pointer"
+            >
+              <div class="col-span-1">
+                <img
+                  src="{%static 'connect\images\save.png' %}"
+                  alt=""
+                  srcset=""
+                  class="h-12"
+                />
+              </div>
+              <div class="col-span-5 text-2xl">Saved Posts</div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="ml-36 mr-36 shadow-lg rounded-3xl px-12 pt-8 pb-4 mt-4 cursor-pointer"
+          id="create"
+        >
+          <div
+            onclick="location.href=`{% url 'connect-create' %}`;"
+            class="grid grid-cols-6"
+          >
+            <div class="col-span-1">
+              <img
+                src="{%static 'connect\images\images.jpg' %}"
+                alt=""
+                srcset=""
+                class="h-8"
+              />
+            </div>
+            <div class="col-span-5 text-2xl">Create a new Post</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'connect/scripts/create.js' %}"></script>
+  </body>
+</html>

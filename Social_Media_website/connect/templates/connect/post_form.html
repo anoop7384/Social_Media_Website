@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% if title %}
+    <title>Alcheringa Connect- {{ title }}</title>
+    {% else %}
+    <title>Alcheringa Connect</title>
+    {% endif %}
+    <style>
+      #id_image {
+        padding-left: 5rem;
+        padding-top: 4rem;
+      }
+
+      #id_description {
+        box-shadow: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        height: 5rem;
+        background-color: rgb(255 237 213);
+        border-radius: 0.3rem;
+        padding-left: 0.5rem;
+        font-size: large;
+      }
+
+      #imgUP {
+        cursor: pointer;
+        text-align: center;
+        justify-content: center;
+        border: 1px solid lightgray;
+        border-radius: 1rem;
+
+        margin-top: 1rem;
+        font-size: 2rem;
+        color: grey;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="grid grid-cols-12 mt-4">
+      <div class="md:col-span-7 col-span-12">
+        <div
+          class="grid grid-cols-12 flex items-center cursor-pointer"
+          onclick="location.href=`{% url 'connect-profile' %}`;"
+        >
+          <div class="col-span-3 flex justify-end">
+            <img
+              src="{%static 'connect\images\logi.jpg' %}"
+              class="h-20"
+              alt=""
+              srcset=""
+              class=""
+            />
+          </div>
+          <div class="col-span-9 text-5xl pl-3 text-gray-600">
+            Alcheringa <span class="text-orange-500">Connect</span>
+          </div>
+        </div>
+        <div class="mx-48 text-4xl mt-12">Create a new post</div>
+        <div class="mx-48 px-12">
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div
+              class="card shadow-lg rounded-3xl border border-black px-8 py-4 mt-8"
+            >
+              <div class="text-2xl">Image</div>
+              <label for="input" class="">
+                <!-- <div id="display-text">Upload an image</div> -->
+                <div class="h-48 bg-orange-100 text-lg" id="imgUP">
+                  {{ form.image }}
+                </div>
+              </label>
+              <div class="text-2xl mt-4">Caption</div>
+
+              {{form.description}}
+              <p class="text-2xl mt-4">Current Location</p>
+              <b class="text-2xl">
+                <p id="location" class="mt-4 cursor-pointer">
+                  Give Location Permissions
+                </p>
+              </b>
+            </div>
+
+            <button
+              type="submit"
+              class="shadow-lg rounded-3xl border border-black p-4 mt-8 text-2xl bg-orange-100"
+              style="width: 100%"
+            >
+              Share
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="md:col-span-5 col-span-12 mt-0">
+        <div class="flex justify-end px-12 mb-20 mt-8 cursor-pointer" onclick="window.location.href=`{% url 'main-profile' %}`">
+          <img
+            src="{{user.profile.image.url}}"
+            alt="img"
+            width="80px"
+            height="80px"
+            class="h-12 w-12 rounded-full"
+          />
+        </div>
+        <div class="ml-36 mr-36 shadow-lg rounded-3xl">
+          <div
+            class="grid grid-cols-6 bg-orange-500 h-24 rounded-t-3xl text-white px-8 pt-4"
+          >
+            <div
+              class="text-5xl mb-2 col-span-4 flex items-center cursor-pointer"
+              onclick="window.location.href=`{% url 'editprofile' %}`"
+            >
+              Messages
+            </div>
+            <div class="col-span-2 flex justify-end items-center">
+            </div>
+          </div>
+          <div class="px-4 pt-4" style="height: 28rem">
+            <div class="modal-body">
+              <ul class="list-unstyled">
+                {%for chat in chats%}
+                <a href="{% url 'chatroom' chat.receiver.id%}" class="text-decoration-none">
+                  <li class="media hover-media">
+                    <div class="grid grid-cols-12 mt-4">
+                      <div class="col-span-3">
+                        <img
+                          src="{{chat.receiver.profile.image.url}}"
+                          alt="img"
+                          width="60px"
+                          height="60px"
+                          class="h-12 w-12 rounded-full"
+                        />
+                      </div>
+                      <div class="media-body text-dark col-span-9">
+                        <h6 class="media-header">{{chat.receiver}}</h6>
+                        <p class="media-text">
+                          {{chat.last_text}}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                </a>
+                <hr class="my-3" />
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div
+          class="ml-36 mr-36 shadow-lg rounded-3xl px-12 pt-8 pb-4 mt-4 cursor-pointer"
+          id="create"
+        >
+          <div
+            onclick="location.href=`{% url 'connect-create' %}`;"
+            class="grid grid-cols-6"
+          >
+            <div class="col-span-1">
+              <img
+                src="{%static 'connect\images\images.jpg' %}"
+                alt=""
+                srcset=""
+                class="h-8"
+              />
+            </div>
+            <div class="col-span-5 text-2xl">Create a new Post</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'connect/scripts/create.js' %}"></script>
+  </body>
+</html>

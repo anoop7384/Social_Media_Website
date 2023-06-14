@@ -23,8 +23,9 @@ urlpatterns = [
     path('posts/saved', views.saved, name='connect-saved'),
     path('posts/account/<int:pk>', views.user_posts, name='post-account'),
     path('profile/account/<int:pk>', views.user_profile, name='profile-account'),
+    path('profile/search', views.search, name='profile-search'),
+    path('profile/follow/<int:pk>', views.follow, name='follow'),
     path('', include('chatrooms.urls')),
-    # path('chatroom/<int:pk>', chatroom, name='chatroom'),
 ]
 
 

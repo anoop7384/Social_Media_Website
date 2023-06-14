@@ -17,7 +17,7 @@
         padding-top: 4rem;
       }
 
-      #id_description {
+      #id_constent {
         box-shadow: 2rem;
         margin-top: 1rem;
         margin-bottom: 1rem;
@@ -44,7 +44,7 @@
 
   <body>
     <div class="grid grid-cols-12 mt-4">
-      <div class="md:col-span-7 col-span-12">
+      <div class="lg:col-span-7 col-span-12">
         <div
           class="grid grid-cols-12 flex items-center cursor-pointer"
           onclick="location.href=`{% url 'connect-profile' %}`;"
@@ -62,9 +62,44 @@
             Insta <span class="text-orange-500">Connect</span>
           </div>
         </div>
-        <div class="mx-48 pl-16 mt-12">
+        <form method="post" action="{% url 'profile-search' %}">
+          {% csrf_token %}
+          <div class="flex items-center">
+            <input
+              type="text"
+              name="username"
+              placeholder="Search by username"
+              class="px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+            <button
+              type="submit"
+              class="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+        {% if profiles %}
+        <h2>Search Results for "{{ search_query }}"</h2>
+        <div class="grid grid-cols-3 gap-4">
+          {% for profile in profiles %}
+          <div class="p-4 bg-white shadow rounded" onclick="location.href=`{% url 'profile-account' profile.id %}`;">
+            <img
+              src="{{ profile.profile.image.url }}"
+              alt="{{ profile.username }}"
+              class="w-16 h-16 object-cover rounded-full mx-auto mb-4"
+            />
+            <p class="text-center">{{ profile.username }}</p>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p>No profiles found.</p>
+        {% endif %} {% comment %}
+        <div class="mx-48 pl-16 mt-24">
+          {% for post in posts%}
           <div
-            class="card shadow-xl border border-gray-200 rounded-t-3xl pt-4 mt-12 mb-4"
+            class="card shadow-xl border border-gray-200 rounded-t-3xl pt-4 my-12"
             id="c1"
           >
             <div class="pl-8 mb-4">
@@ -81,7 +116,7 @@
                   <b
                     class="cursor-pointer hover:underline underline-offset-2"
                     onclick="window.location.href=`{% url 'profile-account' post.id %}`"
-                    >{{ object.author }}</b
+                    >{{ post.author }}</b
                   >
                 </div>
                 <div class="col-span-2 text-2xl flex justify-end px-4">
@@ -94,7 +129,7 @@
               onclick="window.location.href=`{% url 'post-detail' post.id %}`"
             >
               <img
-                src="{{ object.image.url }}"
+                src="{{ post.image.url }}"
                 alt=""
                 srcset=""
                 class="h-96 cursor-pointer"
@@ -125,7 +160,7 @@
                 <div
                   class="col-span-8 text-2xl float-left ml-4 flex items-center pt-2"
                 >
-                  <b>{{ object.likes }} Likes</b>
+                  <b>{{ post.likes }} Likes</b>
                 </div>
 
                 <div class="col-span-2 flex justify-end" type="submit">
@@ -149,47 +184,27 @@
                   {% endif %}
                 </div>
               </div>
-              <div class="px-8 mb-4 text-2xl"><b>{{object.author}}</b> : {{object.description}}</div>
-              <div class="px-8 mb-0 text-2xl"><b>Comments</b></div>
-              <div id="comments" class="px-8 mb-8 text-2xl">
-                
-                {% for comment in comments%}
-                <div class="px-8 mb-0 text-2xl">
-                  <b>{{comment.author}}</b> : {{comment.text}}
-                </div>
-                {% endfor %}
-                <form class="grid-cols-12 flex justify-start items-center h-8 mt-4" method="POST" action="{% url 'post-comment' post.id %}">
-                  {% csrf_token %}
-                  <input class="col-span-8 border border-gray-300"  type="text" name="textfield" id="textfield" />
-                  <button class="px-8 text-2xl col-span-4"type="submit">
-                    Comment
-                  </button>
-                </form>
-              </div>
+              <button
+                class="px-8 text-2xl mb-4"
+                onclick="window.location.href=`{% url 'post-detail' post.id %}`"
+              >
+                View all comments
+              </button>
             </div>
           </div>
-          {% if post.author == user %}
-          <button
-            type="submit"
-            class="shadow-lg rounded-3xl border border-black p-4 mt-8 text-2xl bg-gray-200"
-            style="width: 100%"
-            onclick="window.location.href=`{% url 'post-update' post.id %}`"
-          >
-            Update Post
-          </button>
-          <button
-            type="submit"
-            class="shadow-lg rounded-3xl border border-black p-4 mt-8 text-2xl bg-red-500"
-            style="width: 100%"
-            onclick="window.location.href=`{% url 'post-delete' post.id %}`"
-          >
-            Delete Post
-          </button>
-          {% endif %}
+
+          {% endfor %}
         </div>
+        {% endcomment %}
       </div>
-      <div class="md:col-span-5 col-span-12 mt-0">
-        <div class="flex justify-end px-12 mb-20 mt-8 cursor-pointer" onclick="window.location.href=`{% url 'main-profile' %}`">
+      <div
+        class="lg:col-span-5 col-span-12 mt-0 lg:fixed lg:top-0 lg:right-0"
+        style="width: 50rem"
+      >
+        <div
+          class="flex justify-end px-12 mb-20 mt-8 cursor-pointer"
+          onclick="window.location.href=`{% url 'main-profile' %}`"
+        >
           <img
             src="{{user.profile.image.url}}"
             alt="img"
@@ -198,7 +213,10 @@
             class="h-12 w-12 rounded-full"
           />
         </div>
-        <div class="ml-36 mr-36 shadow-lg rounded-3xl">
+        <div
+          class="lg:ml-36 lg:mr-36 mx-auto shadow-lg rounded-3xl"
+          style="width: 32rem"
+        >
           <div
             class="grid grid-cols-6 bg-orange-500 h-24 rounded-t-3xl text-white px-8 pt-4"
           >
@@ -208,17 +226,19 @@
             >
               Messages
             </div>
-            <div class="col-span-2 flex justify-end items-center">
-            </div>
+            <div class="col-span-2 flex justify-end items-center"></div>
           </div>
           <div class="px-4 pt-4" style="height: 28rem">
             <div class="modal-body">
               <ul class="list-unstyled">
                 {%for chat in chats%}
-                <a href="{% url 'chatroom' chat.receiver.id%}" class="text-decoration-none">
+                <a
+                  href="{% url 'chatroom' chat.receiver.id%}"
+                  class="text-decoration-none"
+                >
                   <li class="media hover-media">
                     <div class="grid grid-cols-12 mt-4">
-                      <div class="col-span-3">
+                      <div class="col-span-2">
                         <img
                           src="{{chat.receiver.profile.image.url}}"
                           alt="img"
@@ -228,10 +248,10 @@
                         />
                       </div>
                       <div class="media-body text-dark col-span-9">
-                        <h6 class="media-header">{{chat.receiver}}</h6>
-                        <p class="media-text">
-                          {{chat.last_text}}
-                        </p>
+                        <h6 class="media-header text-xl">
+                          <b>{{chat.receiver}}</b>
+                        </h6>
+                        <p class="media-text">{{chat.last_text}}</p>
                       </div>
                     </div>
                   </li>
@@ -242,6 +262,7 @@
             </div>
           </div>
         </div>
+
         <div
           class="ml-36 mr-36 shadow-lg rounded-3xl px-12 pt-8 pb-4 mt-4 cursor-pointer"
           id="create"

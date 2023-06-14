@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     {% if title %}
-    <title>Alcheringa Connect- {{ title }}</title>
+    <title>Insta Connect- {{ title }}</title>
     {% else %}
-    <title>Alcheringa Connect</title>
+    <title>Insta Connect</title>
     {% endif %}
     <style>
       #id_image {
@@ -59,7 +59,7 @@
             />
           </div>
           <div class="col-span-9 text-5xl pl-3 text-gray-600">
-            Alcheringa <span class="text-orange-500">Connect</span>
+            Insta <span class="text-orange-500">Connect</span>
           </div>
         </div>
         <div class="mx-48 pl-16 mt-24">
@@ -78,7 +78,7 @@
                     class="h-12 w-12 rounded-full"
                   />
                 </div>
-                <div class="col-span-5 text-2xl ">
+                <div class="col-span-5 text-2xl">
                   <b
                     class="cursor-pointer hover:underline underline-offset-2"
                     onclick="window.location.href=`{% url 'profile-account' post.id %}`"
@@ -163,10 +163,13 @@
         </div>
       </div>
       <div
-        class="lg:col-span-5 col-span-12 mt-0  lg:fixed lg:top-0 lg:right-0"
+        class="lg:col-span-5 col-span-12 mt-0 lg:fixed lg:top-0 lg:right-0"
         style="width: 50rem"
       >
-        <div class="flex justify-end px-12 mb-20 mt-8 cursor-pointer" onclick="window.location.href=`{% url 'main-profile' %}`">
+        <div
+          class="flex justify-end px-12 mb-20 mt-8 cursor-pointer"
+          onclick="window.location.href=`{% url 'main-profile' %}`"
+        >
           <img
             src="{{user.profile.image.url}}"
             alt="img"
@@ -218,6 +221,10 @@
                   <div><b>{{ user.username }}</b></div>
                 </div>
               </div>
+            </div>
+            <div id="desc" class="text-xl mt-12 h-28">
+              Followers : {{user.profile.followers.count}} Following :
+              {{user.profile.following.count}}
             </div>
             <div id="desc" class="text-xl mt-12 h-28">{{user.profile.bio}}</div>
             <div

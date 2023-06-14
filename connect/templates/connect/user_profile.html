@@ -1,5 +1,4 @@
-{% load static %}
-{% load admin_urls %}
+{% load static %} {% load admin_urls %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     {% if title %}
-    <title>Alcheringa Connect- {{ title }}</title>
+    <title>Insta Connect- {{ title }}</title>
     {% else %}
-    <title>Alcheringa Connect</title>
+    <title>Insta Connect</title>
     {% endif %}
     <style>
       #id_image {
@@ -60,7 +59,7 @@
             />
           </div>
           <div class="col-span-9 text-5xl pl-3 text-gray-600">
-            Alcheringa <span class="text-orange-500">Connect</span>
+            Insta <span class="text-orange-500">Connect</span>
           </div>
         </div>
         <div class="mx-48 pl-16 mt-24">
@@ -79,10 +78,10 @@
                     class="h-12 w-12 rounded-full"
                   />
                 </div>
-                <div class="col-span-5 text-2xl ">
+                <div class="col-span-5 text-2xl">
                   <b
                     class="cursor-pointer hover:underline underline-offset-2"
-                    onclick="window.location.href=`{% url 'profile-account' post.id %}`"
+                    onclick="window.location.href=`{% url 'profile-account' post.author.id %}`"
                     >{{ post.author }}</b
                   >
                 </div>
@@ -164,10 +163,13 @@
         </div>
       </div>
       <div
-        class="lg:col-span-5 col-span-12 mt-0  lg:fixed lg:top-0 lg:right-0"
+        class="lg:col-span-5 col-span-12 mt-0 lg:fixed lg:top-0 lg:right-0"
         style="width: 50rem"
       >
-        <div class="flex justify-end px-12 mb-20 mt-8 cursor-pointer" onclick="window.location.href=`{% url 'main-profile' %}`">
+        <div
+          class="flex justify-end px-12 mb-20 mt-8 cursor-pointer"
+          onclick="window.location.href=`{% url 'main-profile' %}`"
+        >
           <img
             src="{{user.profile.image.url}}"
             alt="img"
@@ -181,50 +183,84 @@
           style="width: 32rem"
         >
           <div
-              class="grid grid-cols-6 bg-orange-500 h-48 rounded-t-3xl text-white px-8 pt-20"
+            class="grid grid-cols-6 bg-orange-500 h-48 rounded-t-3xl text-white px-8 pt-20"
+          >
+            <div
+              class="text-5xl mb-2 col-span-4 flex items-center cursor-pointer"
+              onclick="window.location.href=`{% url 'editprofile' %}`"
             >
-              <div
-                class="text-5xl mb-2 col-span-4 flex items-center cursor-pointer"
-                onclick="window.location.href=`{% url 'editprofile' %}`"
-              >
-                User Profile
-              </div>
+              User Profile
             </div>
-            <div class="px-12 pt-12" style="height: 28rem">
-              <div id="name" class="mb-8">
-                <div class="grid grid-cols-6">
-                  <div class="col-span-1 flex items-center">
-                    <img
-                      src="{{ account.profile.image.url }}"
-                      alt="logo"
-                      srcset=""
-                      class="h-12 w-12 rounded-full"
-                    />
-                  </div>
-                  <div class="col-span-5 pl-4">
-                    <div class=" ">username</div>
-                    <div><b>{{ account.username }}</b></div>
-                  </div>
-                </div>
-              </div>
-              <div id="desc" class="text-xl mt-12 h-28">
-                {{account.profile.bio}}
-              </div>
-              {% comment %} <div id="desc" class="text-xl mt-12 h-12"> {% endcomment %}
-                <button onclick="location.href=`{% url 'chatroom' account.id%}`;">Message</button>
-              {% comment %} </div> {% endcomment %}
-              <div onclick="location.href=`{% url 'post-account' account.id%}`;" class="grid grid-cols-6 mt-12 cursor-pointer">
-                <div class="col-span-1">
+          </div>
+          <div class="px-12 pt-12" style="height: 28rem">
+            <div id="name" class="mb-8">
+              <div class="grid grid-cols-6">
+                <div class="col-span-1 flex items-center">
                   <img
-                    src="{%static 'connect\images\images.jpg' %}"
-                    alt=""
+                    src="{{ account.profile.image.url }}"
+                    alt="logo"
                     srcset=""
-                    class="h-12"
+                    class="h-12 w-12 rounded-full"
                   />
                 </div>
-                <div class="col-span-5 text-2xl">Posts</div>
+                <div class="col-span-5 pl-4">
+                  <div class=" ">username</div>
+                  <div><b>{{ account.username }}</b></div>
+                </div>
               </div>
             </div>
+            <div id="desc" class="text-xl mt-12 h-28">
+              Followers : {{account.profile.followers.count}} Following :
+              {{account.profile.following.count}}
+            </div>
+            <div id="desc" class="text-xl mt-12 h-28">
+              {{account.profile.bio}}
+            </div>
+            <form
+              id="follow-form"
+              method="post"
+              action="{% url 'follow' account.id %}"
+            >
+              {% csrf_token %} {% if user in account.profile.followers.all %}
+              <button
+                type="submit"
+                class="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Unfollow
+              </button>
+              {% else %}
+              <button
+                type="submit"
+                class="bg-green-500 text-white px-4 py-2 rounded"
+              >
+                Follow
+              </button>
+              {% endif %}
+            </form>
+            {% comment %}
+            <div id="desc" class="text-xl mt-12 h-12">
+              {% endcomment %}
+              <button onclick="location.href=`{% url 'chatroom' account.id%}`;">
+                Message
+              </button>
+              {% comment %}
+            </div>
+            {% endcomment %}
+            <div
+              onclick="location.href=`{% url 'post-account' account.id%}`;"
+              class="grid grid-cols-6 mt-12 cursor-pointer"
+            >
+              <div class="col-span-1">
+                <img
+                  src="{%static 'connect\images\images.jpg' %}"
+                  alt=""
+                  srcset=""
+                  class="h-12"
+                />
+              </div>
+              <div class="col-span-5 text-2xl">Posts</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     {% if title %}
-    <title>Alcheringa Connect- {{ title }}</title>
+    <title>Insta Connect- {{ title }}</title>
     {% else %}
-    <title>Alcheringa Connect</title>
+    <title>Insta Connect</title>
     {% endif %}
     <style>
       #id_image {
@@ -59,9 +59,26 @@
             />
           </div>
           <div class="col-span-9 text-5xl pl-3 text-gray-600">
-            Alcheringa <span class="text-orange-500">Connect</span>
+            Insta <span class="text-orange-500">Connect</span>
           </div>
         </div>
+        <form method="post" action="{% url 'profile-search' %}">
+          {% csrf_token %}
+          <div class="flex items-center">
+            <input
+              type="text"
+              name="username"
+              placeholder="Search by username"
+              class="px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+            <button
+              type="submit"
+              class="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            >
+              Search
+            </button>
+          </div>
+        </form>
         <div class="mx-48 pl-16 mt-24">
           {% for post in posts%}
           <div

@@ -115,12 +115,12 @@ def profile(request):
 
 
 def user_profile(request, pk):
-    obj = Post.objects.get(pk=pk)
+    obj = User.objects.get(pk=pk)
     context = {
         'title': 'User Profile',
-        'account': obj.author,
+        'account': obj,
         'user': request.user,
-        'posts': Post.objects.filter(author=obj.author),
+        'posts': Post.objects.filter(author=obj),
     }
     return render(request, 'connect/user_profile.html', context)
 
@@ -202,3 +202,41 @@ def user_posts(request, pk):
         'account': obj,
     }
     return render(request, 'connect/user_posts.html', context)
+
+
+def search(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        profiles = User.objects.filter(
+            username__icontains=username)
+
+        context = {
+            'profiles': profiles,
+            'search_query': username
+        }
+        return render(request, 'connect/search_bar.html', context)
+
+    return render(request, 'connect/search_bar.html')
+
+
+@login_required
+def follow(request,pk):
+    if request.method == 'POST':
+        user = request.user
+        account = User.objects.get(pk=pk)
+
+        if account.followers.filter(id=user.id).exists():
+            account.profile.followers.remove(user)
+            user.profile.following.remove(account)
+        else:
+            account.profile.followers.add(user)
+            user.profile.following.add(account)
+        account.save()
+        user.save()
+        context = {
+            'title': 'User Profile',
+            'account': account,
+            'user': request.user,
+            'posts': Post.objects.filter(author=account),
+        }
+        return render(request, 'connect/user_profile.html', context)

@@ -10,6 +10,10 @@ class Profile(models.Model):
     bio=models.TextField(default="Add your bio")
     savedPosts = models.ManyToManyField(Post,blank=True,related_name='user_saved_posts')
     likedPosts = models.ManyToManyField(Post,blank=True,related_name='user_liked_posts')
+    followers = models.ManyToManyField(
+        User, blank=True, related_name='following')
+    following = models.ManyToManyField(
+        User, blank=True, related_name='followers')
     
     def __str__(self):
         return f'{self.user.username}'

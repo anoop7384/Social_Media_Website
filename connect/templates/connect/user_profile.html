@@ -39,6 +39,17 @@
         font-size: 2rem;
         color: grey;
       }
+      ::-webkit-scrollbar {
+        width: 0.5em;
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+      }
     </style>
   </head>
 
@@ -62,7 +73,7 @@
             Insta <span class="text-orange-500">Connect</span>
           </div>
         </div>
-        <div class="mx-48 pl-16 mt-24">
+        <div class="mx-48 pl-16 mt-12 overflow-y-auto h-[45rem]">
           {% for post in posts%}
           <div
             class="card shadow-xl border border-gray-200 rounded-t-3xl pt-4 my-12"
@@ -167,23 +178,46 @@
         style="width: 50rem"
       >
         <div
-          class="flex justify-end px-12 mb-20 mt-8 cursor-pointer"
-          onclick="window.location.href=`{% url 'main-profile' %}`"
+          class="flex justify-end px-12 mb-20 mt-8 cursor-pointer grid grid-cols-12"
         >
-          <img
-            src="{{user.profile.image.url}}"
-            alt="img"
-            width="80px"
-            height="80px"
-            class="h-12 w-12 rounded-full"
-          />
+          <form
+            method="post"
+            action="{% url 'profile-search' %}"
+            class="col-span-9 flex justify-end"
+          >
+            {% csrf_token %}
+            <div class="flex items-center">
+              <input
+                type="text"
+                name="username"
+                placeholder="Search by username"
+                class="px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              />
+              <button
+                type="submit"
+                class="px-4 py-2 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              >
+                Search
+              </button>
+            </div>
+          </form>
+          <div class="col-span-3 flex justify-center">
+            <img
+              src="{{user.profile.image.url}}"
+              alt="img"
+              width="80px"
+              height="80px"
+              class="h-12 w-12 rounded-full hover:bg-gray-100"
+              onclick="window.location.href=`{% url 'main-profile' %}`"
+            />
+          </div>
         </div>
         <div
           class="lg:ml-36 lg:mr-36 mx-auto shadow-lg rounded-3xl"
           style="width: 32rem"
         >
           <div
-            class="grid grid-cols-6 bg-orange-500 h-48 rounded-t-3xl text-white px-8 pt-20"
+            class="grid grid-cols-6 bg-orange-500 h-32 rounded-t-3xl text-white px-8 pt-8"
           >
             <div
               class="text-5xl mb-2 col-span-4 flex items-center cursor-pointer"
@@ -203,49 +237,75 @@
                     class="h-12 w-12 rounded-full"
                   />
                 </div>
-                <div class="col-span-5 pl-4">
+                <div class="col-span-3 pl-4">
                   <div class=" ">username</div>
                   <div><b>{{ account.username }}</b></div>
                 </div>
+                <form
+                  id="follow-form"
+                  class="col-span-2"
+                  method="post"
+                  action="{% url 'follow' account.id %}"
+                >
+                  {% csrf_token %} {% if user in account.profile.followers.all %}
+                  <button
+                    type="submit"
+                    class="bg-gray-500 text-white px-4 py-2 rounded"
+                  >
+                    Unfollow
+                  </button>
+                  {% else %}
+                  <button
+                    type="submit"
+                    class="bg-orange-500 text-white px-4 py-2 rounded"
+                  >
+                    Follow
+                  </button>
+                  {% endif %}
+                </form>
               </div>
             </div>
-            <div id="desc" class="text-xl mt-12 h-28">
-              Followers : {{account.profile.followers.count}} Following :
-              {{account.profile.following.count}}
-            </div>
-            <div id="desc" class="text-xl mt-12 h-28">
-              {{account.profile.bio}}
-            </div>
-            <form
-              id="follow-form"
-              method="post"
-              action="{% url 'follow' account.id %}"
+            <div
+              id="desc"
+              class="text-xl my-6 flex justify-center items-center grid grid-cols-12"
             >
-              {% csrf_token %} {% if user in account.profile.followers.all %}
-              <button
-                type="submit"
-                class="bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Unfollow
-              </button>
-              {% else %}
-              <button
-                type="submit"
-                class="bg-green-500 text-white px-4 py-2 rounded"
-              >
-                Follow
-              </button>
-              {% endif %}
-            </form>
-            {% comment %}
-            <div id="desc" class="text-xl mt-12 h-12">
-              {% endcomment %}
-              <button onclick="location.href=`{% url 'chatroom' account.id%}`;">
+              <div class="col-span-6 flex justify-center items-center"><b>Followers : {{account.profile.followers.count}}</b></div>
+              <div class="col-span-6 flex justify-center items-center"><b>Following : {{account.profile.following.count}}</b></div>
+            </div>
+            <div id="desc" class="text-xl h-24 ">{{user.profile.bio}}</div>
+            <div
+              onclick="location.href=`{% url 'chatroom' account.id %}`;"
+              class="grid grid-cols-6 mt-12 cursor-pointer flex justify-start items-center hover:bg-gray-100"
+            >
+              <div class="col-span-1">
+                <img
+                  src="{%static 'connect\images\message.jpg' %}"
+                  alt=""
+                  srcset=""
+                  class="h-12"
+                />
+              </div>
+              <div class="col-span-5 text-2xl">Message</div>
+            </div>
+            <div
+              onclick="location.href=`{% url 'post-account' account.id %}`;"
+              class="grid grid-cols-6 my-4 cursor-pointer flex justify-start items-center hover:bg-gray-100"
+            >
+              <div class="col-span-1">
+                <img
+                  src="{%static 'connect\images\images.jpg' %}"
+                  alt=""
+                  srcset=""
+                  class="h-12"
+                />
+              </div>
+              <div class="col-span-5 text-2xl">Posts</div>
+            </div>
+            {% comment %} <div class="flex justify-center items-center">
+              <button onclick="location.href=`{% url 'chatroom' account.id%}`;" class="bg-orange-500 text-white px-4 py-2 rounded">
                 Message
               </button>
-              {% comment %}
             </div>
-            {% endcomment %}
             <div
               onclick="location.href=`{% url 'post-account' account.id%}`;"
               class="grid grid-cols-6 mt-12 cursor-pointer"
@@ -260,6 +320,20 @@
               </div>
               <div class="col-span-5 text-2xl">Posts</div>
             </div>
+            <div
+              onclick="location.href=`{% url 'post-account' account.id%}`;"
+              class="grid grid-cols-6 mt-12 cursor-pointer"
+            >
+              <div class="col-span-1">
+                <img
+                  src="{%static 'connect\images\images.jpg' %}"
+                  alt=""
+                  srcset=""
+                  class="h-12"
+                />
+              </div>
+              <div class="col-span-5 text-2xl">Posts</div>
+            </div> {% endcomment %}
           </div>
         </div>
       </div>

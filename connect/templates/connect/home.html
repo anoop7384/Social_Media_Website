@@ -39,6 +39,17 @@
         font-size: 2rem;
         color: grey;
       }
+      ::-webkit-scrollbar {
+        width: 0.5em;
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+      }
     </style>
   </head>
 
@@ -62,24 +73,8 @@
             Insta <span class="text-orange-500">Connect</span>
           </div>
         </div>
-        <form method="post" action="{% url 'profile-search' %}">
-          {% csrf_token %}
-          <div class="flex items-center">
-            <input
-              type="text"
-              name="username"
-              placeholder="Search by username"
-              class="px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-            <button
-              type="submit"
-              class="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            >
-              Search
-            </button>
-          </div>
-        </form>
-        <div class="mx-48 pl-16 mt-24">
+
+        <div class="mx-48 pl-16 mt-12 overflow-y-auto h-[45rem]">
           {% for post in posts%}
           <div
             class="card shadow-xl border border-gray-200 rounded-t-3xl pt-4 my-12"
@@ -180,17 +175,44 @@
         </div>
       </div>
       <div
-        class="lg:col-span-5 col-span-12 mt-0  lg:fixed lg:top-0 lg:right-0"
+        class="lg:col-span-5 col-span-12 mt-0 lg:fixed lg:top-0 lg:right-0"
         style="width: 50rem"
       >
-        <div class="flex justify-end px-12 mb-20 mt-8 cursor-pointer" onclick="window.location.href=`{% url 'main-profile' %}`">
-          <img
-            src="{{user.profile.image.url}}"
-            alt="img"
-            width="80px"
-            height="80px"
-            class="h-12 w-12 rounded-full"
-          />
+        <div
+          class="flex justify-end px-12 mb-20 mt-8 cursor-pointer grid grid-cols-12"
+          
+        >
+          <form
+            method="post"
+            action="{% url 'profile-search' %}"
+            class="col-span-9 flex justify-end"
+          >
+            {% csrf_token %}
+            <div class="flex items-center">
+              <input
+                type="text"
+                name="username"
+                placeholder="Search by username"
+                class="px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              />
+              <button
+                type="submit"
+                class="px-4 py-2 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              >
+                Search
+              </button>
+            </div>
+          </form>
+          <div class="col-span-3 flex justify-center " >
+            <img
+              src="{{user.profile.image.url}}"
+              alt="img"
+              width="80px"
+              height="80px"
+              class="h-12 w-12 rounded-full hover:bg-gray-100"
+              onclick="window.location.href=`{% url 'main-profile' %}`"
+            />
+          </div>
         </div>
         <div
           class="lg:ml-36 lg:mr-36 mx-auto shadow-lg rounded-3xl"
@@ -207,16 +229,16 @@
             </div>
             <div class="col-span-2 flex justify-end items-center"></div>
           </div>
-          <div class="px-4 pt-4" style="height: 28rem">
+          <div class="px-4 pt-4 overflow-y-auto h-[25rem]" style="height: 28rem">
             <div class="modal-body">
               <ul class="list-unstyled">
                 {%for chat in chats%}
                 <a
                   href="{% url 'chatroom' chat.receiver.id%}"
-                  class="text-decoration-none"
+                  class="text-decoration-none "
                 >
                   <li class="media hover-media">
-                    <div class="grid grid-cols-12 mt-4">
+                    <div class="grid grid-cols-12 mt-4 hover:bg-gray-100">
                       <div class="col-span-2">
                         <img
                           src="{{chat.receiver.profile.image.url}}"
@@ -227,7 +249,9 @@
                         />
                       </div>
                       <div class="media-body text-dark col-span-9">
-                        <h6 class="media-header text-xl "><b>{{chat.receiver}}</b></h6>
+                        <h6 class="media-header text-xl">
+                          <b>{{chat.receiver}}</b>
+                        </h6>
                         <p class="media-text">{{chat.last_text}}</p>
                       </div>
                     </div>
@@ -241,7 +265,7 @@
         </div>
 
         <div
-          class="ml-36 mr-36 shadow-lg rounded-3xl px-12 pt-8 pb-4 mt-4 cursor-pointer"
+          class="ml-36 mr-36 shadow-lg rounded-3xl flex justify-center items-center py-4 border border-black-600 mt-4 cursor-pointer hover:bg-gray-100"
           id="create"
         >
           <div

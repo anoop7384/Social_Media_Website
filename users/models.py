@@ -6,6 +6,8 @@ from connect.models import Post
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=4, blank=True, null=True)
+    isVerified = models.BooleanField(default=True, blank=True, null=True)
     image = models.ImageField(default='default.png',upload_to='profile_pics')
     bio=models.TextField(default="Add your bio")
     savedPosts = models.ManyToManyField(Post,blank=True,related_name='user_saved_posts')

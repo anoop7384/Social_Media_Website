@@ -39,6 +39,17 @@
         font-size: 2rem;
         color: grey;
       }
+      ::-webkit-scrollbar {
+        width: 0.5em;
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+      }
     </style>
   </head>
 
@@ -62,7 +73,7 @@
             Insta <span class="text-orange-500">Connect</span>
           </div>
         </div>
-        <div class="mx-48 pl-16 mt-24">
+        <div class="mx-48 pl-16 mt-12 overflow-y-auto h-[45rem]">
           {% for post in posts%}
           <div
             class="card shadow-xl border border-gray-200 rounded-t-3xl pt-4 my-12"
@@ -167,23 +178,46 @@
         style="width: 50rem"
       >
         <div
-          class="flex justify-end px-12 mb-20 mt-8 cursor-pointer"
-          onclick="window.location.href=`{% url 'main-profile' %}`"
+          class="flex justify-end px-12 mb-20 mt-8 cursor-pointer grid grid-cols-12"
         >
-          <img
-            src="{{user.profile.image.url}}"
-            alt="img"
-            width="80px"
-            height="80px"
-            class="h-12 w-12 rounded-full"
-          />
+          <form
+            method="post"
+            action="{% url 'profile-search' %}"
+            class="col-span-9 flex justify-end"
+          >
+            {% csrf_token %}
+            <div class="flex items-center">
+              <input
+                type="text"
+                name="username"
+                placeholder="Search by username"
+                class="px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              />
+              <button
+                type="submit"
+                class="px-4 py-2 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+              >
+                Search
+              </button>
+            </div>
+          </form>
+          <div class="col-span-3 flex justify-center">
+            <img
+              src="{{user.profile.image.url}}"
+              alt="img"
+              width="80px"
+              height="80px"
+              class="h-12 w-12 rounded-full hover:bg-gray-100"
+              onclick="window.location.href=`{% url 'main-profile' %}`"
+            />
+          </div>
         </div>
         <div
           class="lg:ml-36 lg:mr-36 mx-auto shadow-lg rounded-3xl"
           style="width: 32rem"
         >
           <div
-            class="grid grid-cols-6 bg-orange-500 h-48 rounded-t-3xl text-white px-8 pt-20"
+            class="grid grid-cols-6 bg-orange-500 h-32 rounded-t-3xl text-white px-8 pt-4"
           >
             <div
               class="text-5xl mb-2 col-span-4 flex items-center cursor-pointer"
@@ -222,14 +256,18 @@
                 </div>
               </div>
             </div>
-            <div id="desc" class="text-xl mt-12 h-28">
-              Followers : {{user.profile.followers.count}} Following :
-              {{user.profile.following.count}}
+            <div
+              id="desc"
+              class="text-xl my-6 flex justify-center items-center grid grid-cols-12"
+            >
+              <div class="col-span-6 flex justify-center items-center"><b>Followers : {{user.profile.followers.count}}</b></div>
+              <div class="col-span-6 flex justify-center items-center"><b>Following : {{user.profile.following.count}}</b></div>
             </div>
-            <div id="desc" class="text-xl mt-12 h-28">{{user.profile.bio}}</div>
+            <div id="desc" class="text-xl h-24">{{user.profile.bio}}</div>
+
             <div
               onclick="location.href=`{% url 'connect-posts' %}`;"
-              class="grid grid-cols-6 mt-12 cursor-pointer"
+              class="grid grid-cols-6 mt-12 cursor-pointer flex justify-start items-center hover:bg-gray-100"
             >
               <div class="col-span-1">
                 <img
@@ -243,7 +281,7 @@
             </div>
             <div
               onclick="location.href=`{% url 'connect-saved' %}`;"
-              class="grid grid-cols-6 my-4 cursor-pointer"
+              class="grid grid-cols-6 my-4 cursor-pointer flex justify-start items-center hover:bg-gray-100"
             >
               <div class="col-span-1">
                 <img
@@ -259,7 +297,7 @@
         </div>
 
         <div
-          class="ml-36 mr-36 shadow-lg rounded-3xl px-12 pt-8 pb-4 mt-4 cursor-pointer"
+          class="ml-36 mr-36 shadow-lg rounded-3xl flex justify-center items-center py-4 border border-black-600 mt-4 cursor-pointer hover:bg-gray-100"
           id="create"
         >
           <div

@@ -3,20 +3,47 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegisterForm, UserUpdateForm ,ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
+from .models import Profile
+from django.contrib.auth.models import User
+from .email import sendEmailOTP
 
 # Create your views here.
 def register(request):
     if request.method=='POST':
         form=UserRegisterForm(request.POST)
-        message = "Password should contain letters, symbols and numbers"
+        # message = "Password should contain letters, symbols and numbers"
         if form.is_valid():
             form.save()
             username= form.cleaned_data.get('username')
-            return redirect('login')
+            email = form.cleaned_data.get('email')
+            request.session['email'] = email
+            sendEmailOTP(email)
+            return redirect('verify-otp')
+        message=form.errors
+        print(message)
         return render(request, 'users/register.html',{'form':form,'message':message})
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html',{'form':form})
+
+
+def verifyotp(request):
+    if request.method == 'POST':
+        user_email = request.session['email']
+        user = User.objects.get(email=user_email)
+        if 'resend_otp' in request.POST:
+            sendEmailOTP(user_email)
+            message = "New OTP SEND"
+            return render(request, 'users/otp.html', {'message': message})
+        otp = request.POST.get('enter_otp')
+        message = "Wrong OTP"
+        if otp==user.profile.otp:
+            user.profile.isVerified = True
+            user.save()
+            del request.session['email']
+            return redirect('login')
+        return render(request, 'users/otp.html', {'message': message})
+    return render(request, 'users/otp.html')
 
 @login_required
 def editprofile(request):

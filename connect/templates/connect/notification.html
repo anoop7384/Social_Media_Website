@@ -39,6 +39,17 @@
         font-size: 2rem;
         color: grey;
       }
+      ::-webkit-scrollbar {
+        width: 0.5em;
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: transparent;
+      }
     </style>
   </head>
 
@@ -62,27 +73,108 @@
             Insta <span class="text-orange-500">Connect</span>
           </div>
         </div>
-        <div class="mx-48 pl-16 mt-12 overflow-y-auto h-[45rem] text-2xl">
-          {% if profiles %}
-          <h2><b>Search Results for "{{ search_query }}"</b></h2>
-          <div class="grid grid-cols-3 gap-8 mt-8">
-            {% for profile in profiles %}
-            <div
-              class="p-4 bg-white shadow rounded-xl cursor-pointer border border-black-600"
-              onclick="location.href=`{% url 'profile-account' profile.id %}`;"
-            >
-              <img
-                src="{{ profile.profile.image.url }}"
-                alt="{{ profile.username }}"
-                class="w-16 h-16 object-cover rounded-full mx-auto mb-4"
-              />
-              <p class="text-center">{{ profile.username }}</p>
-            </div>
-            {% endfor %}
-          </div>
-          {% else %}
-          <p>No profiles found.</p>
-          {% endif %}
+
+        <div class="mx-48 pl-16 mt-12 overflow-y-auto h-[45rem]">
+          <h1 class="text-2xl font-medium mb-4">Follow requests</h1>
+          <ul class="space-y-4">
+            {%for req in requests%}
+            <li>
+              <div class="flex items-start grid grid-cols-12 border border-black-600 p-4 border-2">
+                <div class="rounded-full col-span-1">
+                  <img
+                    src="{{req.profile.image.url}}"
+                    alt="img"
+                    width="80px"
+                    height="80px"
+                    class="h-12 w-12 rounded-full hover:bg-gray-100"
+                    onclick="window.location.href=`{% url 'main-profile' %}`"
+                  />
+                </div>
+                <div class="ml-3 col-span-8">
+                  <form
+                    action="{% url 'follow-request' req.id %}"
+                    method="POST"
+                    class="flex justify-start items-center"
+                  >
+                    {% csrf_token %}
+
+                    <div class="text-xl mr-8 text-black-700">
+                      {{req.username}}
+                    </div>
+                    <button
+                      type="submit"
+                      name="accept"
+                      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded mr-4"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      type="submit"
+                      name="reject"
+                      class="bg-red-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Reject
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </li>
+            {%endfor%}
+          </ul>
+          <h1 class="text-2xl font-medium my-4">Notification Messages</h1>
+          <ul class="space-y-4">
+            {%for nots in notifs%}
+            <li>
+              <div class="flex items-start border border-black-600 p-4 border-2">
+                <div class="bg-gray-200 rounded-full">
+                  <img
+                    src="{{nots.sender.profile.image.url}}"
+                    alt="img"
+                    width="80px"
+                    height="80px"
+                    class="h-12 w-12 rounded-full hover:bg-gray-100"
+                    onclick="window.location.href=`{% url 'main-profile' %}`"
+                  />
+                </div>
+                <div class="ml-3 ">
+                  {% if nots.notification_type == "like" %}
+                  <p class="text-xl text-black-700">
+                    {{nots.sender}} liked your post.
+                  </p>
+
+                  {% elif nots.notification_type == "comment" %}
+                  <p class="text-xl text-black-700">
+                    {{nots.sender}} commented on your post.
+                  </p>
+
+                  {% elif nots.notification_type == "follow-request" %}
+                  <p class="text-xl text-black-700">
+                    {{nots.sender}} wants to follow you.
+                  </p>
+
+                  {% elif nots.notification_type == "following" %}
+                  <p class="text-xl text-black-700">
+                    {{nots.sender}} started following you.
+                  </p>
+
+                  {% elif nots.notification_type == "accept-request" %}
+                  <p class="text-xl text-black-700">
+                    {{nots.sender}} accepted your follow request.
+                  </p>
+
+                  {% else %}
+                  <p class="text-xl text-black-700">New Message</p>
+
+                  {% endif %}
+
+                  <p class="text-xs text-gray-500">
+                    {{nots.timestamp|date:"j b"}}
+                  </p>
+                </div>
+              </div>
+            </li>
+            {%endfor%}
+          </ul>
         </div>
       </div>
       <div
@@ -120,7 +212,7 @@
               width="80px"
               height="80px"
               class="h-12 w-12 rounded-full hover:bg-gray-100"
-              onclick="window.location.href=`{% url 'notify' %}`"
+              onclick="window.location.href=`{% url 'main-profile' %}`"
             />
           </div>
           <div class="col-span-1 flex justify-center">
@@ -149,7 +241,10 @@
             </div>
             <div class="col-span-2 flex justify-end items-center"></div>
           </div>
-          <div class="px-4 pt-4" style="height: 28rem">
+          <div
+            class="px-4 pt-4 overflow-y-auto h-[25rem]"
+            style="height: 28rem"
+          >
             <div class="modal-body">
               <ul class="list-unstyled">
                 {%for chat in chats%}
@@ -158,7 +253,7 @@
                   class="text-decoration-none"
                 >
                   <li class="media hover-media">
-                    <div class="grid grid-cols-12 mt-4">
+                    <div class="grid grid-cols-12 mt-4 hover:bg-gray-100">
                       <div class="col-span-2">
                         <img
                           src="{{chat.receiver.profile.image.url}}"
@@ -185,7 +280,7 @@
         </div>
 
         <div
-          class="ml-36 mr-36 shadow-lg rounded-3xl px-12 pt-8 pb-4 mt-4 cursor-pointer"
+          class="ml-36 mr-36 shadow-lg rounded-3xl flex justify-center items-center py-4 border border-black-600 mt-4 cursor-pointer hover:bg-gray-100"
           id="create"
         >
           <div

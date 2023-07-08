@@ -162,6 +162,7 @@
                   {% endif %}
                 </div>
               </div>
+              <div class="px-8 mb-4 text-2xl"><b>{{post.author}}</b> : {{post.description}}</div>
               <button
                 class="px-8 text-2xl mb-4"
                 onclick="window.location.href=`{% url 'post-detail' post.id %}`"
@@ -203,7 +204,17 @@
               </button>
             </div>
           </form>
-          <div class="col-span-3 flex justify-center " >
+          <div class="col-span-2 flex justify-center " >
+            <img
+              src="{%static 'connect\images\bell.png' %}"
+              alt="img"
+              width="80px"
+              height="80px"
+              class="h-12 w-12 rounded-full hover:bg-gray-100"
+              onclick="window.location.href=`{% url 'notify' %}`"
+            />
+          </div>
+          <div class="col-span-1 flex justify-center " >
             <img
               src="{{user.profile.image.url}}"
               alt="img"
@@ -248,11 +259,14 @@
                           class="h-12 w-12 rounded-full"
                         />
                       </div>
-                      <div class="media-body text-dark col-span-9">
+                      <div class="media-body text-dark col-span-7">
                         <h6 class="media-header text-xl">
                           <b>{{chat.receiver}}</b>
                         </h6>
                         <p class="media-text">{{chat.last_text}}</p>
+                      </div>
+                      <div class="col-span-3 flex justify-center items-center">
+                        {{chat.last_time|date:"j b"}}
                       </div>
                     </div>
                   </li>

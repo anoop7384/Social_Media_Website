@@ -10,6 +10,7 @@ class ChatRoom(models.Model):
     receiver = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='receiver_chatrooms')
     last_text = models.TextField(default="")
+    last_time = models.DateTimeField(blank=True, null=True)
 
 
 class Message(models.Model):

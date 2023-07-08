@@ -16,6 +16,8 @@ def chatroom(request, pk):
             receiver=request.user, sender=obj)
         sender_room.last_text=text
         receiver_room.last_text=text
+        sender_room.last_time = timezone.now()
+        receiver_room.last_time = timezone.now()
         sender_room.save()
         receiver_room.save()
         sender_message = Message.objects.create(

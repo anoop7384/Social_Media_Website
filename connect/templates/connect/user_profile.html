@@ -254,6 +254,13 @@
                   >
                     Unfollow
                   </button>
+                  {% elif user in account.profile.follower_requests.all %}
+                  <button
+                    type="submit"
+                    class="bg-gray-500 text-white px-4 py-2 rounded"
+                  >
+                    Requested
+                  </button>
                   {% else %}
                   <button
                     type="submit"

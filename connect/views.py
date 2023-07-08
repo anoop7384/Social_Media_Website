@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Comment
+from .models import Post, Comment, Notification
 from django.contrib.auth.models import User
 from users.models import Profile
 from django.http import HttpResponseRedirect
@@ -135,6 +135,9 @@ def comment(request, pk):
     new_comment = Comment.objects.create(
         post=obj, author=request.user, text=text, date_commented=timezone.now())
     new_comment.save()
+    notification1 = Notification(
+        user=obj.author, sender=request.user, notification_type="comment",post=obj,comment=new_comment)
+    notification1.save()
     return redirect('connect-profile')
 
 
@@ -161,6 +164,9 @@ def liked(request, pk):
     obj.likes += 1
     obj.save()
     logUser.save()
+    notification1 = Notification(
+        user=obj.author, sender=request.user, notification_type="like", post=obj)
+    notification1.save()
     return redirect('connect-profile')
 
 
@@ -220,17 +226,30 @@ def search(request):
 
 
 @login_required
-def follow(request,pk):
+def follow(request, pk):
     if request.method == 'POST':
         user = request.user
         account = User.objects.get(pk=pk)
 
-        if account.followers.filter(id=user.id).exists():
+        if account.profile.followers.filter(id=user.id).exists():
             account.profile.followers.remove(user)
             user.profile.following.remove(account)
+        elif account.profile.follower_requests.filter(id=user.id).exists():
+            account.profile.follower_requests.remove(user)
+            user.profile.following_requests.remove(account)
         else:
-            account.profile.followers.add(user)
-            user.profile.following.add(account)
+            if (account.profile.is_private):
+                account.profile.follower_requests.add(user)
+                user.profile.following_requests.add(account)
+                notification1 = Notification(
+                    user=account, sender=user, notification_type="follow-request")
+                notification1.save()
+            else:
+                account.profile.followers.add(user)
+                user.profile.following.add(account)
+                notification1 = Notification(
+                    user=account, sender=user, notification_type="following")
+                notification1.save()
         account.save()
         user.save()
         context = {
@@ -240,3 +259,36 @@ def follow(request,pk):
             'posts': Post.objects.filter(author=account),
         }
         return render(request, 'connect/user_profile.html', context)
+
+
+@login_required
+def notification(request):
+    context = {
+        'title': 'Notifications',
+        'user': request.user,
+        'notifs': Notification.objects.filter(user=request.user),
+        'requests': request.user.profile.follower_requests.all(),
+    }
+    return render(request, 'connect/notification.html', context)
+
+
+@login_required
+def followrequest(request, pk):
+    user = request.user
+    account = User.objects.get(pk=pk)
+    if request.method == 'POST':
+        if 'accept' in request.POST:
+            account.profile.following.add(user)
+            user.profile.followers.add(account)
+            notification1 = Notification(
+                user=account, sender=user, notification_type="accept-request")
+            notification2 = Notification(
+                user=user, sender=account, notification_type="following")
+            notification1.save()
+            notification2.save()
+        else:
+            account.profile.following_requests.remove(user)
+            user.profile.follower_requests.remove(account)
+        account.save()
+        user.save()
+    return redirect('notify')

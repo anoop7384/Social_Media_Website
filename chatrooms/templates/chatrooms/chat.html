@@ -89,18 +89,20 @@
                       {% for message in messages%} {% if message.sender == user %}
                       <div class="flex items-end justify-end">
                         <div
-                          class="bg-blue-500 rounded-lg p-2 text-white max-w-xs"
+                          class="flex flex-col bg-blue-500 rounded-lg p-2 text-white max-w-xs"
                         >
-                          <p>{{message.content}}</p>
-                        </div>
+              <span class="font-bold">{{message.content}}</span>
+              <span class="text-xs flex justify-end">{{message.timestamp|date:"j b"}}</span>
+            </div>
                       </div>
                       
                       {% else %}
                       <div class="flex items-start">
                         <div
-                          class="bg-green-500 rounded-lg p-2 text-white max-w-xs"
+                          class="flex flex-col bg-green-500 rounded-lg p-2 text-white max-w-xs"
                         >
-                          <p>{{message.content}}</p>
+                          <span class="font-bold">{{message.content}}</span>
+              <span class="text-xs flex justify-start">{{message.timestamp|date:"j b"}}</span>
                         </div>
                       </div>
                       {% endif %} {% endfor %}

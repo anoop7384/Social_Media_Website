@@ -25,6 +25,8 @@ urlpatterns = [
     path('profile/account/<int:pk>', views.user_profile, name='profile-account'),
     path('profile/search', views.search, name='profile-search'),
     path('profile/follow/<int:pk>', views.follow, name='follow'),
+    path('profile/notification', views.notification, name='notify'),
+    path('request/<int:pk>', views.followrequest, name='follow-request'),
     path('', include('chatrooms.urls')),
 ]
 

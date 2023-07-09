@@ -8,7 +8,7 @@ from users.models import Profile
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from chatrooms.views import ChatRoom, Message
-
+from cryptography.fernet import Fernet
 
 # Create your views here.
 posts = []
@@ -116,6 +116,8 @@ def profile(request):
 
 def user_profile(request, pk):
     obj = User.objects.get(pk=pk)
+    # encryption_key = Fernet.generate_key()
+    # print(encryption_key.decode())
     context = {
         'title': 'User Profile',
         'account': obj,

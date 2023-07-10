@@ -220,7 +220,8 @@ def search(request):
 
         context = {
             'profiles': profiles,
-            'search_query': username
+            'search_query': username,
+            'chats': ChatRoom.objects.filter(sender=request.user)
         }
         return render(request, 'connect/search_bar.html', context)
 
@@ -270,6 +271,7 @@ def notification(request):
         'user': request.user,
         'notifs': Notification.objects.filter(user=request.user),
         'requests': request.user.profile.follower_requests.all(),
+        'chats': ChatRoom.objects.filter(sender=request.user)
     }
     return render(request, 'connect/notification.html', context)
 
@@ -282,6 +284,8 @@ def followrequest(request, pk):
         if 'accept' in request.POST:
             account.profile.following.add(user)
             user.profile.followers.add(account)
+            account.profile.following_requests.remove(user)
+            user.profile.follower_requests.remove(account)
             notification1 = Notification(
                 user=account, sender=user, notification_type="accept-request")
             notification2 = Notification(

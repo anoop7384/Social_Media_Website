@@ -91,7 +91,7 @@
                 <div class="col-span-5 text-2xl">
                   <b
                     class="cursor-pointer hover:underline underline-offset-2"
-                    onclick="window.location.href=`{% url 'profile-account' post.id %}`"
+                    onclick="window.location.href=`{% url 'profile-account' object.author.id %}`"
                     >{{ object.author }}</b
                   >
                 </div>

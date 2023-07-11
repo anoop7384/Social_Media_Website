@@ -20,7 +20,7 @@ The Social Networking Website is a platform that allows users to connect with ot
 A link to a video demo of social networking website.
 https://www.youtube.com/watch?v=0g-jPhgflOs
 
-[![Video Demo](https://i9.ytimg.com/vi_webp/0g-jPhgflOs/mq2.webp?sqp=CIzrsKUG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGEUgSShlMA8=&rs=AOn4CLC8RYCsMLgQNLJmI90QMcuAfLNQBQ)](https://www.youtube.com/watch?v=0g-jPhgflOs)
+
 
 ## Features
 

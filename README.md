@@ -4,10 +4,10 @@
 
 - [Overview](#overview)
 - [Demo](#demo)
+- [Screenshots](#screenshots)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Screenshots](#screenshots)
 - [Feedback](#feedback)
 
 
@@ -19,6 +19,39 @@ The Social Networking Website is a platform that allows users to connect with ot
 
 A link to a video demo of social networking website.
 https://www.youtube.com/watch?v=0g-jPhgflOs
+
+
+## Screenshots
+
+Here are some screenshots of the Social Networking Website to give you a glimpse of its various pages and features.
+
+## Login Page
+![Login Page](screenshots/login_page.png)
+
+## Registration Page
+![Registration Page](screenshots/registration_page.png)
+
+## Home Page
+![Home Page](screenshots/home_page.png)
+
+## User Profile Page
+![User Profile Page](screenshots/profile_page.png)
+
+## Post Creation Page
+![Home Page](screenshots/post_page.png)
+
+## Message Page
+![Message Page](screenshots/message_page.png)
+
+## Serch Bar Page
+![Explore Page](screenshots/search_page.png)
+
+## Notification Page
+![Group Page](screenshots/notification_page.png)
+
+
+
+These screenshots provide an overview of the website's design and user interface. The actual website may have additional features and pages not depicted here.
 
 
 
@@ -121,37 +154,6 @@ Once the development server is running, you can access the Website by opening a 
 
 You can sign up for a new account  to explore the various features of the website, including creating posts, connecting with friends, messaging friends, and more.
 
-## Screenshots
-
-Here are some screenshots of the Social Networking Website to give you a glimpse of its various pages and features.
-
-## Login Page
-![Login Page](screenshots/login_page.png)
-
-## Registration Page
-![Registration Page](screenshots/registration_page.png)
-
-## Home Page
-![Home Page](screenshots/home_page.png)
-
-## User Profile Page
-![User Profile Page](screenshots/profile_page.png)
-
-## Post Creation Page
-![Home Page](screenshots/post_page.png)
-
-## Message Page
-![Message Page](screenshots/message_page.png)
-
-## Serch Bar Page
-![Explore Page](screenshots/search_page.png)
-
-## Notification Page
-![Group Page](screenshots/notification_page.png)
-
-
-
-These screenshots provide an overview of the website's design and user interface. The actual website may have additional features and pages not depicted here.
 
 
 ## Feedback

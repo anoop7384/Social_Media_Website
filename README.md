@@ -17,6 +17,8 @@ The Social Networking Website is a platform that allows users to connect with ot
 
 ## Demo
 
+https://github.com/user-attachments/assets/683a9b78-3bf3-4679-983f-2a714337ebdd
+
 A link to a video demo of social networking website.
 https://www.youtube.com/watch?v=0g-jPhgflOs
 
